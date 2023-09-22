@@ -61,18 +61,19 @@ const happy_content = [
 
 function sendResponse(msg) {
   
-  msg.addReaction("💚");
+  msg.react("💚");
   
   if (mikkel_in_pdx) {
     var random =  Math.floor((Math.random() * happy_content.length));
     var randomContent = happy_content[random];
 
-    msg.addReaction(happy_reaction);
+    msg.react(happy_reaction);
     msg.reply(randomContent + " " + happy_reaction);
 
   } else {
-    msg.addReaction(sad_reaction);
-    msg.reply("Mikkel is not in PDX today. " + sad_reaction);
+    if (!msg.isCommand())
+      msg.react(sad_reaction);
+      msg.reply("Mikkel is not in PDX today. " + sad_reaction);
   }
 }
 
@@ -134,7 +135,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello! This is a Discord bot web interface.');
+  res.send('Where is Mikkel Green today?');
 });
 
 app.listen(port, () => {
