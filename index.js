@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType, Routes } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
@@ -125,6 +125,12 @@ client.once('ready', async () => {
     console.log('Registered slash commands');
   } catch (error) {
     console.error('Error registering slash commands:', error);
+  }
+
+  try {
+    client.user.setStatus('online', 'following Mikkel Green moves');
+  } catch(error) {
+    console.error('Error setting presence');
   }
 
 });
