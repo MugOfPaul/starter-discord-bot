@@ -20,7 +20,6 @@ const client = new Client({
 const mikkel_in_pdx = true;
 const happy_reaction = "🥳";
 const sad_reaction = "😭";
-const bot_user_id = "1154500783803478108";
 const mikkel_user_id = "584557745039081485";
 
 const mikkels = [
@@ -81,7 +80,7 @@ client.on("messageCreate", (msg) => {
   
   // Channel messages
   if (msg.guild) {
-    if ( content.includes(bot_user_id) ||
+    if ( content.includes(client.user.tag) ||
         (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t)))) {
         sendResponse(msg);
       }
@@ -105,7 +104,7 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.once('ready', async () => {
-  console.log(`Logged in as ${client.user.tag}`);
+  console.log(`Logged in as ${client.user.tag}...`);
 
   try {
     // Register the "mikkel" slash command globally
@@ -117,7 +116,7 @@ client.once('ready', async () => {
     ];
 
     const commandData = await client.application.commands.set(commands);
-    console.log('Registered slash commands:', commandData);
+    console.log('Registered slash commands');
   } catch (error) {
     console.error('Error registering slash commands:', error);
   }
