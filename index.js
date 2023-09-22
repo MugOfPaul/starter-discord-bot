@@ -2,11 +2,15 @@
 // const { clientId, guildId, token, publicKey } = require('./config.json');
 const { Client, GatewayIntentBits, Routes } = require('discord.js');
 require('dotenv').config()
+
+const express = require('express');
+
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
 const PUBLIC_KEY = process.env.PUBLIC_KEY || 'not set'
 const GUILD_ID = process.env.GUILD_ID 
 
+const app = express();
 
 const client = new Client({
   intents: [
@@ -125,4 +129,13 @@ client.once('ready', async () => {
 
 
 client.login(TOKEN);
+
+app.get('/', async (req,res) =>{
+  return res.send('Follow documentation ')
+})
+
+
+app.listen(8999, () => {
+
+})
 
