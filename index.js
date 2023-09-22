@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, Routes } = require('discord.js');
 require('dotenv').config()
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
@@ -106,7 +106,7 @@ client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
 
   try {
-    client.applicationGuild.commands.set([]);
+    Routes.applicationGuild.commands.set([]);
 
     // Register the "mikkel" slash command globally
     const commands = [
