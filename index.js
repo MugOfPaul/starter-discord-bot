@@ -80,17 +80,34 @@ const discord_api = axios.create({
 
 
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
-  const interaction = req.body;
+  const { type, content } = req.body;
 
-  if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+  if (type === InteractionType.APPLICATION_COMMAND) {
+    const { name } = content;
     console.log(interaction.data.name)
-    if(interaction.data.name == 'yo'){
+    if(name == 'mikkel'){
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: buildContent(),
         },
       });
+    }
+
+    if (type === InteractionType.CHANNEL_MESSAGE_WITH_SOURCE) {
+
+      if (
+        content.includes(bot_user_id) ||
+        (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t)))
+      ) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: buildContent(),
+          },
+        });
+      }
+
     }
 
     // if(interaction.data.name == 'dm'){
@@ -138,7 +155,7 @@ app.get('/register_commands', async (req,res) =>{
       slash_commands
     )
     console.log(discord_response.data)
-    return res.send('commands have been registered')
+    return res.send('Commands have been registered')
   }catch(e){
     console.error(e.code)
     console.error(e.response?.data)
@@ -148,7 +165,7 @@ app.get('/register_commands', async (req,res) =>{
 
 
 app.get('/', async (req,res) =>{
-  return res.send('Follow documentation ')
+  return res.send('Nothing to see here')
 })
 
 
