@@ -106,7 +106,7 @@ client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
 
   try {
-    client.application.commands.set([]);
+    client.applicationGuild.commands.set([]);
 
     // Register the "mikkel" slash command globally
     const commands = [
