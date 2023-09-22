@@ -102,7 +102,7 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
 
   try {
