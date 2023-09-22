@@ -4,6 +4,7 @@ const { Client, GatewayIntentBits, Routes } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
+const port = process.env.PORT || 3000;
 
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
@@ -127,15 +128,18 @@ client.once('ready', async () => {
 
 });
 
-
 client.login(TOKEN);
 
-app.get('/', async (req,res) =>{
-  return res.send('Follow documentation ')
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Hello! This is a Discord bot web interface.');
+});
+
+app.listen(port, () => {
+
 })
 
 
-app.listen(8999, () => {
-
-})
 
