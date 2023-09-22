@@ -43,29 +43,29 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       });
     }
 
-    if(interaction.data.name == 'dm'){
-      // https://discord.com/developers/docs/resources/user#create-dm
-      let c = (await discord_api.post(`/users/@me/channels`,{
-        recipient_id: interaction.member.user.id
-      })).data
-      try{
-        // https://discord.com/developers/docs/resources/channel#create-message
-        let res = await discord_api.post(`/channels/${c.id}/messages`,{
-          content:'Yo! I got your slash command. I am not able to respond to DMs just slash commands.',
-        })
-        console.log(res.data)
-      }catch(e){
-        console.log(e)
-      }
+    // if(interaction.data.name == 'dm'){
+    //   // https://discord.com/developers/docs/resources/user#create-dm
+    //   let c = (await discord_api.post(`/users/@me/channels`,{
+    //     recipient_id: interaction.member.user.id
+    //   })).data
+    //   try{
+    //     // https://discord.com/developers/docs/resources/channel#create-message
+    //     let res = await discord_api.post(`/channels/${c.id}/messages`,{
+    //       content:'Yo! I got your slash command. I am not able to respond to DMs just slash commands.',
+    //     })
+    //     console.log(res.data)
+    //   }catch(e){
+    //     console.log(e)
+    //   }
 
-      return res.send({
-        // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data:{
-          content:'👍'
-        }
-      });
-    }
+    //   return res.send({
+    //     // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
+    //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    //     data:{
+    //       content:'👍'
+    //     }
+    //   });
+    // }
   }
 
 });
@@ -75,15 +75,10 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 app.get('/register_commands', async (req,res) =>{
   let slash_commands = [
     {
-      "name": "yo",
-      "description": "replies with Yo!",
+      "name": "mikkel",
+      "description": "Is Mikkel in PDX? Let's find out",
       "options": []
     },
-    {
-      "name": "dm",
-      "description": "sends user a DM",
-      "options": []
-    }
   ]
   try
   {
