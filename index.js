@@ -4,7 +4,7 @@ const { Client, GatewayIntentBits, Routes } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8999;
 
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
