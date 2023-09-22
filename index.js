@@ -77,7 +77,18 @@ const discord_api = axios.create({
 });
 
 
+app.post('/direct-messages', async (req, res) => {
+  const { content, author } = req.body;
 
+  if (!author.bot) {
+
+    if (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t))) {
+      return res.status(200).send(buildContent());
+    }
+  } else {
+    res.status(200).end(); // Ignore messages from other bots
+  }
+});
 
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   const { type, content } = req.body;
@@ -86,7 +97,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const { name } = content;
     console.log(interaction.data.name)
     if(name == 'mikkel'){
-      return res.send({
+      return res.status(200).send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: buildContent(),
@@ -100,7 +111,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         content.includes(bot_user_id) ||
         (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t)))
       ) {
-        return res.send({
+        return res.status(200).send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             content: buildContent(),
