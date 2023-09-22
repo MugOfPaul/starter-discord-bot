@@ -86,9 +86,11 @@ app.post('/direct-messages', async (req, res) => {
 
     if (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t))) {
       return res.status(200).send(buildContent());
+    } else {
+      res.send("What's up?");
     }
   } else {
-    res.status(200).end(); // Ignore messages from other bots
+    res.status(200).end(); 
   }
 });
 
