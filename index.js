@@ -98,7 +98,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'mikkel') {
     // Respond to the "mikkel" command
-    await sendResponse(interaction); // Replace with your desired response
+    sendResponse(interaction); // Replace with your desired response
   }
 });
 
@@ -106,6 +106,8 @@ client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
 
   try {
+    client.application.commands.set([]);
+
     // Register the "mikkel" slash command globally
     const commands = [
       {
@@ -121,6 +123,7 @@ client.once('ready', async () => {
   }
 
 });
+
 
 client.login(TOKEN);
 
