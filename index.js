@@ -12,6 +12,56 @@ const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
 
 
+const mikkel_in_pdx = true;
+const happy_reaction = "🥳";
+const sad_reaction = "😭";
+
+const mikkels = [
+  mikkel_user_id,
+  "mikkel",
+  "mikkel.green"
+];
+
+const terms = [
+  "where",
+  "whereabouts",
+  "when",
+  "pdx",
+  "portland",
+  "rose city",
+  "travel",
+  "traveling",
+  "flight",
+  "visiting",
+  "visit"
+];
+
+const happy_content = [
+  "Mikkel *IS IN PDX TODAY*",
+  "Shockingly @" + mikkel_user_id + " is in Portland today.",
+  "I am happy to report Mikkel Green is currently in PDX",
+  "Believe it or not, @" + mikkel_user_id + " is in the Rose City",
+  "He is in Portland... for now.",
+  "Hey whaddayaknow! Mikkel is in PDX!",
+  "Mr. Green is currently visiting Porland, Oregon.",
+  "Based on my latest intel, @" + mikkel_user_id + " is in Portland today."
+];
+
+
+function buildContent() {
+  
+  //msg.addReaction("💚");
+  if (mikkel_in_pdx) {
+    var random =  Math.floor((Math.random() * happy_content.length));
+    return happy_content[random];
+
+  } else {
+    var random =  Math.floor((Math.random() * sad_content.length));
+    return sad_content[random];
+  }
+}
+
+
 const app = express();
 // app.use(bodyParser.json());
 
@@ -38,7 +88,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `Yo ${interaction.member.user.username}!`,
+          content: buildContent(),
         },
       });
     }
