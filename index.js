@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, IntentsBits } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 require('dotenv').config()
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
@@ -10,9 +10,9 @@ const GUILD_ID = process.env.GUILD_ID
 
 const client = new Client({
   intents: [
-    IntentsBits.Guilds, 
-    IntentsBits.GuildMessages, 
-    IntentsBits.DirectMessages,
+    GatewayIntentBits.Guilds, 
+    GatewayIntentBits.GuildMessages, 
+    GatewayIntentBits.DirectMessages,
   ],
 });
 
