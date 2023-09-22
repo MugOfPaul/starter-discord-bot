@@ -104,6 +104,22 @@ client.on('interactionCreate', async (interaction) => {
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
+
+  try {
+    // Register the "mikkel" slash command globally
+    const commands = [
+      {
+        name: 'mikkel',
+        description: 'Where is Mikkel? Just ask!',
+      },
+    ];
+
+    const commandData = await client.application.commands.set(commands);
+    console.log('Registered slash commands:', commandData);
+  } catch (error) {
+    console.error('Error registering slash commands:', error);
+  }
+
 });
 
 client.login(TOKEN);
