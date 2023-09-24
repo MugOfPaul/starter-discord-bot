@@ -22,7 +22,7 @@ const client = new Client({
 });
 
 
-const mikkel_in_pdx = true;
+const mikkel_in_pdx = process.env.MIKKEL_IN_PDX === 'true';
 const happy_reaction = "🥳";
 const sad_reaction = "😭";
 const mikkel_user_id = "584557745039081485";
