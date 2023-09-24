@@ -59,6 +59,8 @@ const happy_content = [
 ];
 
 
+/////////////////////////////////////////////
+// bot stuff
 function sendResponse(msg) {
   
   msg.react("💚");
@@ -135,17 +137,18 @@ client.once('ready', async () => {
 
 });
 
-client.login(TOKEN);
 
+//////////////////////////////////////////////////////////////
+// Web Server
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Where is Mikkel Green today?');
+  res.send('Where is Mikkel Green today?<br/>Discord client status:' + client.isReady());
 });
 
 app.listen(port, () => {
-
+  client.login(TOKEN);
 })
 
 
