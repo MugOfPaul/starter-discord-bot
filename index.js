@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, Partials, ActivityType, REST, Routes, userMention } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, ActivityType, REST, Routes, userMention, ChannelType } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
@@ -104,13 +104,13 @@ function sendStatusResponse(msg) {
 client.on("messageCreate", (msg) => {
 
    if (msg.author.bot) return; // Ignore messages from bots
-  //console.log('messageCreate...');
+  console.log('messageCreate... ');
 
   // When a message is created
   var content = msg.content.toLowerCase();
   
   // DMs
-  if (msg.channel.type == 'DM') {
+  if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
   
     console.log("DM received: " + content);
 
