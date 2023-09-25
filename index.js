@@ -152,6 +152,20 @@ app.get('/', (req, res) => {
   res.send('Where is Mikkel Green today?<br/>Discord client status:' + client.isReady());
 });
 
+app.get('/clean-commands', (req, res) => {
+
+    // for guild-based commands
+    rest.put(Routes.applicationGuildCommands(APPLICATION_ID, GUILD_ID), { body: [] })
+    .then(() => res.send('Successfully deleted all guild commands.<br/>'))
+    .catch(console.error);
+
+    // for global commands
+    rest.put(Routes.applicationCommands(APPLICATION_ID), { body: [] })
+    .then(() => res.send('Successfully deleted all application commands.<br/>'))
+    .catch(console.error);
+
+});
+
 app.listen(port, () => {
   client.login(TOKEN);
 })
