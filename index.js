@@ -22,6 +22,10 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
   ],
+  partials: [
+    Partials.Channel,
+    Partials.Message
+  ]
 });
 
 
@@ -66,6 +70,16 @@ const happy_content = [
 
 /////////////////////////////////////////////
 // bot stuff
+
+function sendToGeneral(msgContent) {
+  const channel = client.channels.cache.get('689164244683456517');
+  channel.send({content: msgContent});
+}
+
+function mikkelStatusUpdate(status) {
+  mikkel_in_pdx = status;
+}
+
 function sendStatusResponse(msg) {
   
   if (msg.react) 
@@ -95,8 +109,15 @@ client.on("messageCreate", (msg) => {
   // When a message is created
   var content = msg.content.toLowerCase();
   
+  // DMs
+  if (msg.channel.type == 'DM') {
+  
+    console.log("DM received: " + content);
+
+    return; 
+  }
+
   // Channel messages
- 
   // if our bot is mentioned
   if (msg.mentions.has(client.user.id)) {
     console.log('...responding to mention.')
@@ -202,8 +223,7 @@ app.get('/clean-commands', (req, res) => {
 
 app.get('/custom', (req, res) => {
   var msgContent = "I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.";
-  const channel = client.channels.cache.get('689164244683456517');
-  channel.send({content: msgContent})
+  sendToGeneral(msgContent);
   res.send('Done.');
 });
 
