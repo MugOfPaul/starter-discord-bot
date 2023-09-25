@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, ActivityType, REST, Routes, userMention } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, ActivityType, REST, Routes, userMention } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
