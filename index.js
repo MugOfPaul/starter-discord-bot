@@ -130,7 +130,7 @@ client.once('ready', async () => {
   }
 
   try {
-    client.user.setStatus('online', 'following Mikkel Green moves');
+    client.user.setPresence({ activities: [{ name: 'keeping tabs on Mikkel Green' }], status: 'idle' });
   } catch(error) {
     console.error('Error setting presence');
   }
