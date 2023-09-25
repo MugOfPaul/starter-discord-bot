@@ -95,7 +95,8 @@ client.on("messageCreate", (msg) => {
   
   // Channel messages
   // mikkel mentioned or tagged
-  if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
+  // content.includes(client.user.tag) ||
+  if (mikkels.some((m) => content.includes(m))) {
     console.log('This is a Mikkel message...');
 
     // status type keywords
@@ -117,7 +118,7 @@ client.on("messageCreate", (msg) => {
     }
 
   } else {
-    console.log('Does not appear to be a Mikkel message');
+    console.log('Does not appear to be a Mikkel message. ' + content);
   }
   
 });
