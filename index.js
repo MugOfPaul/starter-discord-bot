@@ -87,7 +87,7 @@ function sendStatusResponse(msg) {
 
 client.on("messageCreate", (msg) => {
 
-  console.log('messageCreate...\n Bot?' + msg.author.bot);
+  console.log('messageCreate...\n');
   if (msg.author.bot) return; // Ignore messages from other bots
 
   // When a message is created
@@ -96,20 +96,28 @@ client.on("messageCreate", (msg) => {
   // Channel messages
   // mikkel mentioned or tagged
   if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
+    console.log('This is a Mikkel message...');
 
     // status type keywords
     if ( status_terms.some((t) => content.includes(t))) {
+      console.log('sendingStatusResponse...');
       sendStatusResponse(msg);
 
     // forget keywords
     } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
+      console.log('sending forgetful quip...');
       msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
 
     // late keywords
     } else if (content.includes('late')) {
+      console.log('sending late quip...');
       msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
+    } else {
+      console.log('No interesting keywords... ' + content);
     }
 
+  } else {
+    console.log('Does not appear to be a Mikkel message');
   }
   
 });
