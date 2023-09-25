@@ -76,7 +76,7 @@ function sendToGeneral(msgContent) {
   channel.send({content: msgContent});
 }
 
-function mikkelStatusUpdate(status) {
+function setMikkelStatus(status) {
   mikkel_in_pdx = status;
 }
 
@@ -104,7 +104,7 @@ function sendStatusResponse(msg) {
 client.on("messageCreate", (msg) => {
 
    if (msg.author.bot) return; // Ignore messages from bots
-  console.log('messageCreate... ');
+  // console.log('messageCreate... ');
 
   // When a message is created
   var content = msg.content.toLowerCase();
@@ -112,7 +112,14 @@ client.on("messageCreate", (msg) => {
   // DMs
   if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
   
-    console.log("DM received: " + content);
+    if (content.startsWith('status:')) {
+      setMikkelStatus(content.includes('in'));
+      msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
+    } else if (content.startsWith('general:')) {
+      sendToGeneral(content.replace('general:',''));      
+    } else {
+      msg.reply('Hey, what\'s up?')
+    }
 
     return; 
   }
