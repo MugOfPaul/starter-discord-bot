@@ -87,36 +87,31 @@ function sendStatusResponse(msg) {
 
 client.on("messageCreate", (msg) => {
 
-  console.log('messageCreate...\n' + msg);
+  console.log('messageCreate...\n Bot?' + msg.author.bot);
   if (msg.author.bot) return; // Ignore messages from other bots
 
   // When a message is created
   var content = msg.content.toLowerCase();
   
-  // DM
-  if (msg.channel.type == 'dm') {
-    msg.reply("What's up?");
-  } 
   // Channel messages
-  else if (msg.guild) {
-    // mikkel mentioned or tagged
-    if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
+  // mikkel mentioned or tagged
+  if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
 
-      // status type keywords
-      if ( status_terms.some((t) => content.includes(t))) {
-        sendStatusResponse(msg);
+    // status type keywords
+    if ( status_terms.some((t) => content.includes(t))) {
+      sendStatusResponse(msg);
 
-      // forget keywords
-      } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
-        msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
+    // forget keywords
+    } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
+      msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
 
-      // late keywords
-      } else if (content.includes('late')) {
-        msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
-      }
-
+    // late keywords
+    } else if (content.includes('late')) {
+      msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
     }
+
   }
+  
 });
 
 client.on('interactionCreate', async (interaction) => {
