@@ -32,10 +32,11 @@ const mikkel_user_id = "584557745039081485";
 const mikkels = [
   mikkel_user_id,
   "mikkel",
-  "mikkel.green"
+  "mikkel.green",
+  "mikkel green"
 ];
 
-const terms = [
+const status_terms = [
   "where",
   "whereabouts",
   "when",
@@ -63,7 +64,7 @@ const happy_content = [
 
 /////////////////////////////////////////////
 // bot stuff
-function sendResponse(msg) {
+function sendStatusResponse(msg) {
   
   if (msg.react) 
     msg.react("💚");
@@ -77,7 +78,6 @@ function sendResponse(msg) {
     msg.reply(randomContent + " " + happy_reaction);
 
   } else {
-    if (!msg.isCommand())
       if (msg.react)
         msg.react(sad_reaction);
 
@@ -94,10 +94,19 @@ client.on("messageCreate", (msg) => {
   
   // Channel messages
   if (msg.guild) {
-    if ( content.includes(client.user.tag) ||
-        (mikkels.some((m) => content.includes(m)) && terms.some((t) => content.includes(t)))) {
-        sendResponse(msg);
+    // mikkel mentioned or tagged
+    if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m)) {
+
+      // status type keywords
+      if ( status_terms.some((t) => content.includes(t))) {
+        sendStatusResponse(msg);
+      } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
+        msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
+      } else if (content.includes('late')) {
+        msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
       }
+
+    }
   // DM
   } else {
     msg.reply("What's up?");
