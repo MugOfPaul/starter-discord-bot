@@ -81,10 +81,6 @@ function setMikkelStatus(status) {
 }
 
 function sendStatusResponse(msg) {
-  
-  if (msg.react) 
-    msg.react("💚");
-  
   if (mikkel_in_pdx) {
     var random =  Math.floor((Math.random() * happy_content.length));
     var randomContent = happy_content[random];
@@ -131,9 +127,8 @@ client.on("messageCreate", (msg) => {
     sendStatusResponse(msg);
   }
    // mikkel mentioned or tagged
-  if (mikkels.some((m) => content.includes(m))) {
+  if (msg.author.id == mikkel_user_id || mikkels.some((m) => content.includes(m))) {
     //console.log('This is a Mikkel message...');
-
     // status type keywords
     if ( status_terms.some((t) => content.includes(t))) {
       //console.log('sendingStatusResponse...');
@@ -152,6 +147,12 @@ client.on("messageCreate", (msg) => {
       if (msg.react) msg.react("🙄");
     } else {
       //console.log('No interesting keywords... ' + content);
+      if (msg.react) {
+        if (msg.author.id == mikkel_user_id)
+          msg.react("🧐");
+        else
+           msg.react("💚");
+      }
     }
 
   } else {
