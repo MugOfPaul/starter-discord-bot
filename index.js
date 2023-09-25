@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, ActivityType, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType, REST, Routes, userMention } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
@@ -53,13 +53,13 @@ const status_terms = [
 
 const happy_content = [
   "Mikkel *IS IN PDX TODAY*",
-  "Shockingly @" + mikkel_user_id + " is in Portland today.",
+  "Shockingly " + userMention(mikkel_user_id) + " is in Portland today.",
   "I am happy to report Mikkel Green is currently in PDX",
-  "Believe it or not, @" + mikkel_user_id + " is in the Rose City",
+  "Believe it or not, " + userMention(mikkel_user_id) + " is in the Rose City",
   "He is in Portland... for now.",
   "Hey whaddayaknow! Mikkel is in PDX!",
   "Mr. Green is currently visiting Porland, Oregon.",
-  "Based on my latest intel, @" + mikkel_user_id + " is in Portland today."
+  "Based on my latest intel, " + userMention(mikkel_user_id) + " is in Portland today."
 ];
 
 
@@ -88,9 +88,8 @@ function sendStatusResponse(msg) {
 
 client.on("messageCreate", (msg) => {
 
-  console.log('messageCreate...');
-
-  if (msg.author.bot) return; // Ignore messages from other bots
+   if (msg.author.bot) return; // Ignore messages from bots
+   console.log('messageCreate...');
 
   // When a message is created
   var content = msg.content.toLowerCase();
@@ -109,12 +108,14 @@ client.on("messageCreate", (msg) => {
     // forget keywords
     } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
       console.log('sending forgetful quip...');
-      msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
+      msg.reply("Oh... did  " + userMention(mikkel_user_id) + " forget something... again? 🙄");
+      if (msg.react) msg.react("🙄")
 
     // late keywords
     } else if (content.includes('late')) {
       console.log('sending late quip...');
-      msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
+      msg.reply("You didn't think  " + userMention(mikkel_user_id) + " would be on time, did you? 🙄");
+      if (msg.react) msg.react("🙄");
     } else {
       console.log('No interesting keywords... ' + content);
     }
