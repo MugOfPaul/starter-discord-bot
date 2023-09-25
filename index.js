@@ -115,6 +115,7 @@ client.on("messageCreate", (msg) => {
       }
 
     }
+  }
 });
 
 client.on('interactionCreate', async (interaction) => {
