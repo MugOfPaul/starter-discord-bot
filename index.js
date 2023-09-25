@@ -95,13 +95,17 @@ client.on("messageCreate", (msg) => {
   // Channel messages
   if (msg.guild) {
     // mikkel mentioned or tagged
-    if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m)) {
+    if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
 
       // status type keywords
       if ( status_terms.some((t) => content.includes(t))) {
         sendStatusResponse(msg);
+
+      // forget keywords
       } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
         msg.reply("Oh... did  @" + mikkel_user_id + " forget something... again? 🙄");
+
+      // late keywords
       } else if (content.includes('late')) {
         msg.reply("You didn't think  @" + mikkel_user_id + " would be on time, did you? 🙄");
       }
@@ -147,7 +151,7 @@ client.once('ready', async () => {
   }
 
   try {
-    client.user.setPresence({ activities: [{ name: 'keeping tabs on Mikkel Green' }], status: 'idle' });
+    client.user.setPresence({ activities: [{ name: 'keeping tabs on Mikkel Green' }], status: 'online' });
   } catch(error) {
     console.error('Error setting presence');
   }
