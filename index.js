@@ -59,7 +59,8 @@ const happy_content = [
   "He is in Portland... for now.",
   "Hey whaddayaknow! Mikkel is in PDX!",
   "Mr. Green is currently visiting Porland, Oregon.",
-  "Based on my latest intel, " + userMention(mikkel_user_id) + " is in Portland today."
+  "Based on my latest intel, " + userMention(mikkel_user_id) + " is in Portland today.",
+  "He's in town. Must have a tinder date scheduled."
 ];
 
 
@@ -98,30 +99,30 @@ client.on("messageCreate", (msg) => {
   // mikkel mentioned or tagged
   // content.includes(client.user.tag) ||
   if (mikkels.some((m) => content.includes(m))) {
-    console.log('This is a Mikkel message...');
+    //console.log('This is a Mikkel message...');
 
     // status type keywords
     if ( status_terms.some((t) => content.includes(t))) {
-      console.log('sendingStatusResponse...');
+      //console.log('sendingStatusResponse...');
       sendStatusResponse(msg);
 
     // forget keywords
     } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
-      console.log('sending forgetful quip...');
+      //console.log('sending forgetful quip...');
       msg.reply("Oh... did  " + userMention(mikkel_user_id) + " forget something... again? 🙄");
       if (msg.react) msg.react("🙄")
 
     // late keywords
     } else if (content.includes('late')) {
-      console.log('sending late quip...');
+      //console.log('sending late quip...');
       msg.reply("You didn't think  " + userMention(mikkel_user_id) + " would be on time, did you? 🙄");
       if (msg.react) msg.react("🙄");
     } else {
-      console.log('No interesting keywords... ' + content);
+      //console.log('No interesting keywords... ' + content);
     }
 
   } else {
-    console.log('Does not appear to be a Mikkel message. ' + content);
+    //console.log('Does not appear to be a Mikkel message. ' + content);
   }
   
 });
@@ -192,6 +193,10 @@ app.get('/clean-commands', (req, res) => {
     .then(() => res.send('Successfully deleted all application commands.<br/>'))
     .catch(console.error);
 
+});
+
+app.get('/custom', (req, res) => {
+  client.channels.get('689164244683456517').send("I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.")
 });
 
 app.listen(port, () => {
