@@ -19,6 +19,7 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds, 
     GatewayIntentBits.GuildMessages, 
+    GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
   ],
 });
@@ -87,7 +88,8 @@ function sendStatusResponse(msg) {
 
 client.on("messageCreate", (msg) => {
 
-  console.log('messageCreate...\n');
+  console.log('messageCreate...');
+
   if (msg.author.bot) return; // Ignore messages from other bots
 
   // When a message is created
