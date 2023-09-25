@@ -90,7 +90,7 @@ function sendStatusResponse(msg) {
 client.on("messageCreate", (msg) => {
 
    if (msg.author.bot) return; // Ignore messages from bots
-   console.log('messageCreate...');
+  //console.log('messageCreate...');
 
   // When a message is created
   var content = msg.content.toLowerCase();
