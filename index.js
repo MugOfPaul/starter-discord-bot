@@ -196,7 +196,9 @@ app.get('/clean-commands', (req, res) => {
 });
 
 app.get('/custom', (req, res) => {
-  client.channels.get('689164244683456517').send("I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.")
+  var msgContent = "I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.";
+  const channel = client.channels.cache.get('689164244683456517');
+  channel.send({content: msgContent})
 });
 
 app.listen(port, () => {
