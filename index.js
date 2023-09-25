@@ -99,6 +99,7 @@ client.on("messageCreate", (msg) => {
  
   // if our bot is mentioned
   if (msg.mentions.has(client.user.id)) {
+    console.log('...responding to mention.')
     sendStatusResponse(msg);
   }
    // mikkel mentioned or tagged
@@ -203,6 +204,7 @@ app.get('/custom', (req, res) => {
   var msgContent = "I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.";
   const channel = client.channels.cache.get('689164244683456517');
   channel.send({content: msgContent})
+  res.send('Done.');
 });
 
 app.listen(port, () => {
