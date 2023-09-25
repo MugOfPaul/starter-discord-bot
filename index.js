@@ -92,8 +92,12 @@ client.on("messageCreate", (msg) => {
   // When a message is created
   var content = msg.content.toLowerCase();
   
+  // DM
+  if (msg.channel.type == 'dm') {
+    msg.reply("What's up?");
+  } 
   // Channel messages
-  if (msg.guild) {
+  else if (msg.guild) {
     // mikkel mentioned or tagged
     if ( content.includes(client.user.tag) || mikkels.some((m) => content.includes(m))) {
 
@@ -111,10 +115,6 @@ client.on("messageCreate", (msg) => {
       }
 
     }
-  // DM
-  } else {
-    msg.reply("What's up?");
-  }
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -124,7 +124,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'mikkel') {
     // Respond to the "mikkel" command
-    sendResponse(interaction); // Replace with your desired response
+    sendStatusResponse(interaction); // Replace with your desired response
   } else {
     interaction.reply("I don't know what to do with this");
   }
@@ -151,7 +151,7 @@ client.once('ready', async () => {
   }
 
   try {
-    client.user.setPresence({ activities: [{ name: 'keeping tabs on Mikkel Green' }], status: 'online' });
+    client.user.setPresence({ activities: [{ name: 'the game of \"Where is Mikkel Green\"' }], status: 'online' });
   } catch(error) {
     console.error('Error setting presence');
   }
