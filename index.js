@@ -1,6 +1,6 @@
 
 // const { clientId, guildId, token, publicKey } = require('./config.json');
-const { Client, GatewayIntentBits, ActivityType, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType, REST, Routes } = require('discord.js');
 require('dotenv').config()
 
 const express = require('express');
@@ -12,6 +12,8 @@ const PUBLIC_KEY = process.env.PUBLIC_KEY || 'not set'
 const GUILD_ID = process.env.GUILD_ID 
 
 const app = express();
+
+const rest = new REST().setToken(TOKEN);
 
 const client = new Client({
   intents: [
@@ -119,9 +121,11 @@ client.once('ready', async () => {
     const commands = [
       {
         name: 'mikkel',
-        description: 'Where is Mikkel? I\'ll find out',
+        description: 'Where is Mikkel? I will find out',
       },
     ];
+
+    client.application.commands.set([]);
 
     const commandData = await client.application.commands.set(commands);
     console.log('Registered slash commands');
@@ -135,6 +139,7 @@ client.once('ready', async () => {
     console.error('Error setting presence');
   }
 
+  console.log("Bot ready.");
 });
 
 
