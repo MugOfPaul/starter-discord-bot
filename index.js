@@ -96,8 +96,12 @@ client.on("messageCreate", (msg) => {
   var content = msg.content.toLowerCase();
   
   // Channel messages
-  // mikkel mentioned or tagged
-  // content.includes(client.user.tag) ||
+ 
+  // if our bot is mentioned
+  if (msg.mentions.has(client.user.id)) {
+    sendStatusResponse(msg);
+  }
+   // mikkel mentioned or tagged
   if (mikkels.some((m) => content.includes(m))) {
     //console.log('This is a Mikkel message...');
 
