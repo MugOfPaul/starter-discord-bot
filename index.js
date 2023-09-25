@@ -87,6 +87,7 @@ function sendStatusResponse(msg) {
 
 client.on("messageCreate", (msg) => {
 
+  console.log('messageCreate...\n' + msg);
   if (msg.author.bot) return; // Ignore messages from other bots
 
   // When a message is created
@@ -119,6 +120,7 @@ client.on("messageCreate", (msg) => {
 });
 
 client.on('interactionCreate', async (interaction) => {
+  console.log('interactionCreate...\n' + interaction);
   if (!interaction.isCommand()) return; // Ignore interactions that are not commands
 
   const { commandName } = interaction;
@@ -132,6 +134,7 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.once('ready', async () => {
+  console.log('ready...\n');
   console.log(`Logged in as ${client.user.tag}...`);
 
   try {
