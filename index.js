@@ -119,7 +119,7 @@ client.once('ready', async () => {
     const commands = [
       {
         name: 'mikkel',
-        description: 'Where is Mikkel? Just ask!',
+        description: 'Where is Mikkel? I\'ll find out',
       },
     ];
 
