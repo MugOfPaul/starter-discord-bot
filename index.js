@@ -126,8 +126,16 @@ client.on("messageCreate", (msg) => {
     console.log('...responding to mention.')
     sendStatusResponse(msg);
   }
+  // mikkel is the author
+  else if (msg.author.id == mikkel_user_id) {
+    if (['poop', '💩', 'gut'].some(s => content.includes(s))) {
+      if (msg.react) msg.react("💩");
+    } else {
+      if (msg.react) msg.react("🧐");
+    }
+  }
    // mikkel mentioned or tagged
-  if (msg.author.id == mikkel_user_id || mikkels.some((m) => content.includes(m))) {
+  else if (msg.author.id == mikkel_user_id || mikkels.some((m) => content.includes(m))) {
     //console.log('This is a Mikkel message...');
     // status type keywords
     if ( status_terms.some((t) => content.includes(t))) {
@@ -135,24 +143,18 @@ client.on("messageCreate", (msg) => {
       sendStatusResponse(msg);
 
     // forget keywords
-    } else if (content.includes('forgot') || content.includes('forget') || content.includes('forgotten')) {
-      //console.log('sending forgetful quip...');
+    } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
       msg.reply("Oh... did  " + userMention(mikkel_user_id) + " forget something... again? 🙄");
       if (msg.react) msg.react("🙄")
 
     // late keywords
-    } else if (content.includes('late')) {
+    } else if (['late'].some(s => content.includes(s))) {
       //console.log('sending late quip...');
       msg.reply("You didn't think  " + userMention(mikkel_user_id) + " would be on time, did you? 🙄");
       if (msg.react) msg.react("🙄");
     } else {
       //console.log('No interesting keywords... ' + content);
-      if (msg.react) {
-        if (msg.author.id == mikkel_user_id)
-          msg.react("🧐");
-        else
-           msg.react("💚");
-      }
+      if (msg.react) msg.react("💚");
     }
 
   } else {
