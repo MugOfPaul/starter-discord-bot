@@ -130,6 +130,9 @@ client.on("messageCreate", (msg) => {
   else if (msg.author.id == mikkel_user_id) {
     if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === "863464428522438686") {
       if (msg.react) msg.react("💩");
+    } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
+      msg.reply("Oh... did you forget something... again? 🙄");
+      if (msg.react) msg.react("🙄");
     } else {
       if (msg.react && Math.random() >= 0.5) msg.react("🧐");
     }
@@ -144,8 +147,8 @@ client.on("messageCreate", (msg) => {
 
     // forget keywords
     } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
-      msg.reply("Oh... did  " + userMention(mikkel_user_id) + " forget something... again? 🙄");
-      if (msg.react) msg.react("🙄")
+      msg.reply("Typical " + userMention(mikkel_user_id) + " 🙄");
+      if (msg.react) msg.react("🙄");
 
     // late keywords
     } else if (['late'].some(s => content.includes(s))) {
