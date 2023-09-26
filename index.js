@@ -128,7 +128,7 @@ client.on("messageCreate", (msg) => {
   }
   // mikkel is the author
   else if (msg.author.id == mikkel_user_id) {
-    if (['poop', '💩', 'gut'].some(s => content.includes(s))) {
+    if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === "863464428522438686") {
       if (msg.react) msg.react("💩");
     } else {
       if (msg.react) msg.react("🧐");
