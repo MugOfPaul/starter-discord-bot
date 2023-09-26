@@ -157,7 +157,7 @@ client.on("messageCreate", (msg) => {
       if (msg.react) msg.react("🙄");
     } else {
       //console.log('No interesting keywords... ' + content);
-      if (msg.react) msg.react("💚");
+      if (msg.react && Math.random() >= 0.5) msg.react("💚");
     }
 
   } else {
