@@ -133,8 +133,11 @@ client.on("messageCreate", (msg) => {
     } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
       msg.reply("Oh... did you forget something... again? 🙄");
       if (msg.react) msg.react("🙄");
+    }  else if (['be late', 'running behind', 'going to be late'].some(s => content.includes(s))) {
+      msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
+      if (msg.react) msg.react("🙄");
     } else {
-      if (msg.react && Math.random() >= 0.5) msg.react("🧐");
+      if (msg.react && Math.random() >= 0.75) msg.react("🧐");
     }
   }
    // mikkel mentioned or tagged
