@@ -172,7 +172,7 @@ function setUpPresence() {
   }
 }
 
-function setUpCommands() {
+async function setUpCommands() {
   try {
     // Register the "mikkel" slash command globally
     const commands = [
