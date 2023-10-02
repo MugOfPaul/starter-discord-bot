@@ -164,6 +164,33 @@ function replyToChannel(msg) {
   }
 }
 
+function setUpPresence() {
+  try {
+    client.user.setPresence({ activities: [{ name: 'the game of \"Where is Mikkel Green\"' }], status: 'online' });
+  } catch(error) {
+    console.error('Error setting presence');
+  }
+}
+
+function setUpCommands() {
+  try {
+    // Register the "mikkel" slash command globally
+    const commands = [
+      {
+        name: 'mikkel',
+        description: 'Where is Mikkel? I will find out',
+      },
+    ];
+
+    client.application.commands.set([]);
+
+    const commandData = await client.application.commands.set(commands);
+    console.log('Registered slash commands');
+  } catch (error) {
+    console.error('Error registering slash commands:', error);
+  }
+}
+
 client.on("messageCreate", (msg) => {
    if (msg.author.bot) return; // Ignore messages from bots
   
@@ -204,31 +231,26 @@ client.once('ready', async () => {
   console.log('ready...\n');
   console.log(`Logged in as ${client.user.tag}...`);
 
-  try {
-    // Register the "mikkel" slash command globally
-    const commands = [
-      {
-        name: 'mikkel',
-        description: 'Where is Mikkel? I will find out',
-      },
-    ];
-
-    client.application.commands.set([]);
-
-    const commandData = await client.application.commands.set(commands);
-    console.log('Registered slash commands');
-  } catch (error) {
-    console.error('Error registering slash commands:', error);
-  }
-
-  try {
-    client.user.setPresence({ activities: [{ name: 'the game of \"Where is Mikkel Green\"' }], status: 'online' });
-  } catch(error) {
-    console.error('Error setting presence');
-  }
+  setUpCommands();
+  setUpPresence();
 
   console.log("Bot ready.");
 });
+
+function cleanCommands(res)
+{
+  // for guild-based commands
+  rest.put(Routes.applicationGuildCommands(APPLICATION_ID, GUILD_ID), { body: [] })
+  .then(() => console.log("Deleted guild commands"))
+  .catch(console.error);
+
+  // for global commands
+  rest.put(Routes.applicationCommands(APPLICATION_ID), { body: [] })
+  .then(() => console.log("Deleted global commands"))
+  .catch(console.error);
+
+  res.send('Successfully deleted all commands.<br/>')
+}
 
 
 //////////////////////////////////////////////////////////////
@@ -241,17 +263,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/clean-commands', (req, res) => {
-
-    // for guild-based commands
-    rest.put(Routes.applicationGuildCommands(APPLICATION_ID, GUILD_ID), { body: [] })
-    .then(() => res.send('Successfully deleted all guild commands.<br/>'))
-    .catch(console.error);
-
-    // for global commands
-    rest.put(Routes.applicationCommands(APPLICATION_ID), { body: [] })
-    .then(() => res.send('Successfully deleted all application commands.<br/>'))
-    .catch(console.error);
-
+  cleanCommands(res);
 });
 
 app.get('/custom', (req, res) => {
