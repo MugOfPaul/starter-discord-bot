@@ -73,6 +73,7 @@ const sad_content = [
   "Nope " + userMention(MIKKEL_USER_ID) + " is not in Portland today.",
   "Mikkel isn't in Portland today. But maybe he's got a Hinge date for tomorrow?",
   "Mr. Green does not appear to be in Portland, Oregon today.",
+  "The bad news: " + userMention(MIKKEL_USER_ID) + " is not in Portland today.\nThe good news: He probably forgot something and will be back for it.",
   "I don't know where he is. But it's not Portland!"
 ];
 
