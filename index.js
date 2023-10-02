@@ -30,12 +30,13 @@ const client = new Client({
 
 
 var mikkel_in_pdx = process.env.MIKKEL_IN_PDX === 'true';
-const happy_reaction = "🥳";
-const sad_reaction = "😭";
-const mikkel_user_id = "584557745039081485";
+const HAPPY_REACT = "🥳";
+const SAD_REACT = "😭";
+const MIKKEL_USER_ID = "584557745039081485";
+const POOP_CHANNEL_ID = "863464428522438686";
 
 const mikkels = [
-  mikkel_user_id,
+  MIKKEL_USER_ID,
   "mikkel",
   "mikkel.green",
   "mikkel green"
@@ -57,14 +58,22 @@ const status_terms = [
 
 const happy_content = [
   "Mikkel *IS IN PDX TODAY*",
-  "Shockingly " + userMention(mikkel_user_id) + " is in Portland today.",
+  "Shockingly " + userMention(MIKKEL_USER_ID) + " is in Portland today.",
   "I am happy to report Mikkel Green is currently in PDX",
-  "Believe it or not, " + userMention(mikkel_user_id) + " is in the Rose City",
+  "Believe it or not, " + userMention(MIKKEL_USER_ID) + " is in the Rose City",
   "He is in Portland... for now.",
   "Hey whaddayaknow! Mikkel is in PDX!",
   "Mr. Green is currently visiting Porland, Oregon.",
-  "Based on my latest intel, " + userMention(mikkel_user_id) + " is in Portland today.",
-  "He's in town. Must have a tinder date scheduled."
+  "Based on my latest intel, " + userMention(MIKKEL_USER_ID) + " is in Portland today.",
+  "He's in town. Must have a Hinge date scheduled."
+];
+
+const sad_content = [
+  "Mikkel is not in Portland today.",
+  "Nope " + userMention(MIKKEL_USER_ID) + " is not in Portland today.",
+  "Mikkel isn't in Portland today. But maybe he's got a Hinge date for tomorrow?",
+  "Mr. Green does not appear to be in Portland, Oregon today.",
+  "I don't know where he is. But it's not Portland!"
 ];
 
 
@@ -76,41 +85,58 @@ function sendToGeneral(msgContent) {
   channel.send({content: msgContent});
 }
 
-function setMikkelStatus(status) {
+function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
+  if (msg) replyWithStatus(msg);
 }
 
-function sendStatusResponse(msg) {
+function replyWithStatus(msg) {
   if (mikkel_in_pdx) {
     var random =  Math.floor((Math.random() * happy_content.length));
     var randomContent = happy_content[random];
 
     if (msg.react)
-      msg.react(happy_reaction);
-    msg.reply(randomContent + " " + happy_reaction);
+      msg.react(HAPPY_REACT);
+    msg.reply(randomContent + " " + HAPPY_REACT);
 
   } else {
-      if (msg.react)
-        msg.react(sad_reaction);
+    var random =  Math.floor((Math.random() * sad_content.length));
+    var randomContent = sad_content[random];
 
-      msg.reply("Mikkel is not in PDX today. " + sad_reaction);
+    if (msg.react)
+      msg.react(SAD_REACT);
+
+      msg.reply(randomContent + " " + SAD_REACT);
+  }
+}
+
+function replyToMikkel(msg) {
+  var content = msg.content.toLowerCase();
+
+  if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === POOP_CHANNEL_ID) {
+    if (msg.react) msg.react("💩");
+  } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
+    msg.reply("Oh... did you forget something... again? 🙄");
+    if (msg.react) msg.react("🙄");
+  }  else if (['be late', 'running behind', 'going to be late'].some(s => content.includes(s))) {
+    msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
+    if (msg.react) msg.react("🙄");
+  } else {
+    if (msg.react && Math.random() >= 0.75) msg.react("🧐");
   }
 }
 
 client.on("messageCreate", (msg) => {
-
    if (msg.author.bot) return; // Ignore messages from bots
-  // console.log('messageCreate... ');
 
-  // When a message is created
   var content = msg.content.toLowerCase();
   
   // DMs
   if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
   
     if (content.startsWith('status:')) {
-      setMikkelStatus(content.includes('in'));
-      msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
+      setMikkelStatus(content.includes('in'), msg);
+      //msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
     } else if (content.startsWith('general:')) {
       sendToGeneral(content.replace('general:',''));      
     } else {
@@ -123,50 +149,38 @@ client.on("messageCreate", (msg) => {
   // Channel messages
   // if our bot is mentioned
   if (msg.mentions.has(client.user.id)) {
-    console.log('...responding to mention.')
-    sendStatusResponse(msg);
+    replyWithStatus(msg);
   }
   // mikkel is the author
-  else if (msg.author.id == mikkel_user_id) {
-    if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === "863464428522438686") {
-      if (msg.react) msg.react("💩");
-    } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
-      msg.reply("Oh... did you forget something... again? 🙄");
-      if (msg.react) msg.react("🙄");
-    }  else if (['be late', 'running behind', 'going to be late'].some(s => content.includes(s))) {
-      msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
-      if (msg.react) msg.react("🙄");
-    } else {
-      if (msg.react && Math.random() >= 0.75) msg.react("🧐");
-    }
+  else if (msg.author.id == MIKKEL_USER_ID) {
+    replyToMikkel(msg);
   }
    // mikkel mentioned or tagged
-  else if (msg.author.id == mikkel_user_id || mikkels.some((m) => content.includes(m))) {
-    //console.log('This is a Mikkel message...');
-    // status type keywords
+  else if (msg.author.id == MIKKEL_USER_ID || mikkels.some((m) => content.includes(m))) {
+    
+    // status in PDX keywords
     if ( status_terms.some((t) => content.includes(t))) {
-      //console.log('sendingStatusResponse...');
-      sendStatusResponse(msg);
+      replyWithStatus(msg);
 
     // forget keywords
     } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
-      msg.reply("Typical " + userMention(mikkel_user_id) + " 🙄");
+      msg.reply("Typical " + userMention(MIKKEL_USER_ID) + " 🙄");
       if (msg.react) msg.react("🙄");
 
     // late keywords
     } else if (['late'].some(s => content.includes(s))) {
       //console.log('sending late quip...');
-      msg.reply("You didn't think  " + userMention(mikkel_user_id) + " would be on time, did you? 🙄");
+      msg.reply("You didn't think  " + userMention(MIKKEL_USER_ID) + " would be on time, did you? 🙄");
       if (msg.react) msg.react("🙄");
+
+    // no special keywords
     } else {
       //console.log('No interesting keywords... ' + content);
       if (msg.react && Math.random() >= 0.5) msg.react("💚");
     }
 
-  } else {
-    //console.log('Does not appear to be a Mikkel message. ' + content);
-  }
-  
+  } 
+
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -177,10 +191,8 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'mikkel') {
     // Respond to the "mikkel" command
-    sendStatusResponse(interaction); // Replace with your desired response
-  } else {
-    interaction.reply("I don't know what to do with this");
-  }
+    replyWithStatus(interaction); // Replace with your desired response
+  } 
 });
 
 client.once('ready', async () => {
@@ -238,7 +250,7 @@ app.get('/clean-commands', (req, res) => {
 });
 
 app.get('/custom', (req, res) => {
-  var msgContent = "I'm back, baby! Here to keep y'all updated on " + userMention(mikkel_user_id) + " and where he _might_ be.";
+  var msgContent = "I'm back, baby! Here to keep y'all updated on " + userMention(MIKKEL_USER_ID) + " and where he _might_ be.";
   sendToGeneral(msgContent);
   res.send('Done.');
 });
