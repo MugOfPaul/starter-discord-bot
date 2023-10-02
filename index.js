@@ -126,27 +126,10 @@ function replyToMikkel(msg) {
   }
 }
 
-client.on("messageCreate", (msg) => {
-   if (msg.author.bot) return; // Ignore messages from bots
+function replyToChannel(msg) {
 
   var content = msg.content.toLowerCase();
-  
-  // DMs
-  if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
-  
-    if (content.startsWith('status:')) {
-      setMikkelStatus(content.includes('in'), msg);
-      //msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
-    } else if (content.startsWith('general:')) {
-      sendToGeneral(content.replace('general:',''));      
-    } else {
-      msg.reply('Hey, what\'s up?')
-    }
 
-    return; 
-  }
-
-  // Channel messages
   // if our bot is mentioned
   if (msg.mentions.has(client.user.id)) {
     replyWithStatus(msg);
@@ -178,13 +161,35 @@ client.on("messageCreate", (msg) => {
       //console.log('No interesting keywords... ' + content);
       if (msg.react && Math.random() >= 0.5) msg.react("💚");
     }
+  }
+}
 
-  } 
+client.on("messageCreate", (msg) => {
+   if (msg.author.bot) return; // Ignore messages from bots
+  
+  // DMs
+  if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
+    var content = msg.content.toLowerCase();
+
+    if (content.startsWith('status:')) {
+      setMikkelStatus(content.includes('in'), msg);
+      //msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
+    } else if (content.startsWith('general:')) {
+      sendToGeneral(content.replace('general:',''));      
+    } else {
+      replyToChannel(msg);
+    }
+
+    return; 
+  }
+
+  // Channel messages
+  replyToChannel(msg);
 
 });
 
 client.on('interactionCreate', async (interaction) => {
-  console.log('interactionCreate...\n' + interaction);
+  
   if (!interaction.isCommand()) return; // Ignore interactions that are not commands
 
   const { commandName } = interaction;
