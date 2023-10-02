@@ -231,7 +231,7 @@ client.once('ready', async () => {
   console.log('ready...\n');
   console.log(`Logged in as ${client.user.tag}...`);
 
-  setUpCommands();
+  await setUpCommands();
   setUpPresence();
 
   console.log("Bot ready.");
