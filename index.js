@@ -201,7 +201,7 @@ async function setUpDMDataStore() {
     var savedStatus = false;
     const fetched = await msg.channel.fetchMessages({limit: 99}); 
     fetched.forEach(msg => {
-      console.log(msg.id + ":" msg.content);
+      console.log(msg.id + ":" + msg.content);
       if (msg.content.includes("status:")) {
         savedStatus = ['in', 'true'].some(s => msg.content.toLowerCase().includes(s));
       }
