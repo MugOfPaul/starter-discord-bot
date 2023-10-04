@@ -92,7 +92,7 @@ async function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
   if (dm_datastore_channel) {
     // clear all old messages
-    const fetched = await dm_datastore_channel.fetchMessages({limit: 99}); 
+    const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
     msg.channel.bulkDelete(fetched);
 
     // save the latest
