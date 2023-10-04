@@ -189,6 +189,8 @@ function replyToChannel(msg) {
 }
 
 async function setUpDMDataStore() {
+
+  console.log("Setting up DataStore in DMs...");
   client.user.send("-").then(msg => { 
     dm_datastore_channel = client.channels.cache.get(msg.channelId);
   }).catch(console.error);
