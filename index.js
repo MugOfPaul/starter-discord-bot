@@ -29,7 +29,9 @@ const client = new Client({
 });
 
 
+var dm_datastore_channel = 0;
 var mikkel_in_pdx = process.env.MIKKEL_IN_PDX === 'true';
+
 const HAPPY_REACT = "🥳";
 const SAD_REACT = "😭";
 const MIKKEL_USER_ID = "584557745039081485";
@@ -88,6 +90,14 @@ function sendToGeneral(msgContent) {
 
 function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
+  if (dm_datastore_channel) {
+    // clear all old messages
+    const fetched = await dm_datastore_channel.fetchMessages({limit: 99}); 
+    msg.channel.bulkDelete(fetched);
+
+    // save the latest
+    dm_datastore_channel.send("status:" + mikkel_in_pdx);
+  }
   if (msg) replyWithStatus(msg);
 }
 
@@ -128,6 +138,8 @@ function replyToMikkel(msg) {
 }
 
 function replyToChannel(msg) {
+
+  if (msg.author.bot) return; // Ignore messages from bots
 
   var content = msg.content.toLowerCase();
 
@@ -176,6 +188,30 @@ function replyToChannel(msg) {
   }
 }
 
+async function setUpDMDataStore() {
+  client.user.send("-").then(msg => { 
+    dm_datastore_channel = client.channels.cache.get(msg.channelId);
+  }).catch(console.error);
+
+  if (dm_datastore_channel) {
+    console.log("Got DM Datastore channel. Reading data...");
+
+    var savedStatus = false;
+    const fetched = await msg.channel.fetchMessages({limit: 99}); 
+    fetched.forEach(msg => {
+      console.log(msg.id + ":" msg.content);
+      if (msg.content.includes("status:")) {
+        savedStatus = ['in', 'true'].some(s => msg.content.toLowerCase().includes(s));
+      }
+    });
+
+    console.log("Saving Mikkel status...");
+    setMikkelStatus(savedStatus);
+    
+  }
+
+}
+
 function setUpPresence() {
   try {
     client.user.setPresence({ activities: [{ name: 'the game of \"Where is Mikkel Green\"' }], status: 'online' });
@@ -204,22 +240,16 @@ async function setUpCommands() {
 }
 
 client.on("messageCreate", (msg) => {
-   if (msg.author.bot) return; // Ignore messages from bots
-  
+   
   // DMs
-  if (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM) {
+  if (msg.author.id != client.user.id && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
     var content = msg.content.toLowerCase();
 
     if (content.startsWith('status:')) {
       setMikkelStatus(['in', 'true'].some(s => content.includes(s)), msg);
-      //msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
     } else if (content.startsWith('general:')) {
       sendToGeneral(content.replace('general:',''));      
-    } else {
-      replyToChannel(msg);
-    }
-
-    return; 
+    } 
   }
 
   // Channel messages
@@ -245,6 +275,7 @@ client.once('ready', async () => {
 
   await setUpCommands();
   setUpPresence();
+  await setUpDMDataStore();
 
   console.log("Bot ready.");
 });
