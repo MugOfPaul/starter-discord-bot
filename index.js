@@ -88,7 +88,7 @@ function sendToGeneral(msgContent) {
   channel.send({content: msgContent});
 }
 
-function setMikkelStatus(status, msg) {
+async function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
   if (dm_datastore_channel) {
     // clear all old messages
