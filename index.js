@@ -92,8 +92,8 @@ async function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
   if (dm_datastore_channel) {
     // clear all old messages
-    const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
-    dm_datastore_channel.bulkDelete(fetched);
+    // const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
+    // dm_datastore_channel.bulkDelete(fetched);
 
     // save the latest
     dm_datastore_channel.send("status:" + mikkel_in_pdx);
@@ -203,8 +203,8 @@ async function setUpDMDataStore() {
     
     const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
     fetched.forEach(msg => {
-      console.log(msg.id + ":" + msg.content);
-      if (msg.content.includes("status:")) {
+      if (msg.content.includes("status:") && msg.author.id === client.user.id) {
+        console.log(msg.id + ":" + msg.content);
         savedStatus = ['in', 'true'].some(s => msg.content.toLowerCase().includes(s));
       }
     });
