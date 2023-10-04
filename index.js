@@ -88,7 +88,6 @@ function sendToGeneral(msgContent) {
 
 function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
-  process.env.MIKKEL_IN_PDX = mikkel_in_pdx ? "true" : "false";
   if (msg) replyWithStatus(msg);
 }
 
@@ -212,7 +211,7 @@ client.on("messageCreate", (msg) => {
     var content = msg.content.toLowerCase();
 
     if (content.startsWith('status:')) {
-      setMikkelStatus(content.includes('in'), msg);
+      setMikkelStatus(['in', 'true'].some(s => content.includes(s)), msg);
       //msg.reply('Mikkel PDX Status is now ' + mikkel_in_pdx);
     } else if (content.startsWith('general:')) {
       sendToGeneral(content.replace('general:',''));      
