@@ -192,7 +192,8 @@ async function setUpDMDataStore() {
 
   console.log("Setting up DataStore in DMs...");
   
-  dm_datastore_channel = client.users.cache.get('611959441193041951').send("🫦").channel;
+  const user = await client.users.fetch("611959441193041951").catch(() => null);
+  dm_datastore_channel = user.send("🫦").channel;
  
   if (dm_datastore_channel) {
     console.log("Got DM Datastore channel. Reading data...");
