@@ -133,7 +133,7 @@ function replyToMikkel(msg) {
     msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
     if (msg.react) msg.react("🙄");
   } else {
-    if (msg.react && Math.random() >= 0.75) msg.react("🧐");
+    if (msg.react && Math.random() >= 0.6) msg.react("🕵🏾‍♂️");
   }
 }
 
@@ -193,7 +193,7 @@ async function setUpDMDataStore() {
   console.log("Setting up DataStore in DMs...");
   
   const user = await client.users.fetch("611959441193041951").catch(() => null);
-  const msg = await user.send("🫦");
+  const msg = await user.send("🕵🏾‍♂️");
   dm_datastore_channel = await client.channels.fetch(msg.channel.id);
  
   if (dm_datastore_channel) {
