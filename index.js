@@ -34,6 +34,7 @@ var mikkel_in_pdx = process.env.MIKKEL_IN_PDX === 'true';
 
 const HAPPY_REACT = "🥳";
 const SAD_REACT = "😭";
+const OWNER_USER_ID = "611959441193041951";
 const MIKKEL_USER_ID = "584557745039081485";
 const POOP_CHANNEL_ID = "863464428522438686";
 
@@ -192,7 +193,7 @@ async function setUpDMDataStore() {
 
   console.log("Setting up DataStore in DMs...");
   
-  const user = await client.users.fetch("611959441193041951").catch(() => null);
+  const user = await client.users.fetch(OWNER_USER_ID).catch(() => null);
   const msg = await user.send("🕵🏾‍♂️");
   dm_datastore_channel = await client.channels.fetch(msg.channel.id);
  
