@@ -88,6 +88,7 @@ function sendToGeneral(msgContent) {
 
 function setMikkelStatus(status, msg) {
   mikkel_in_pdx = status;
+  process.env.MIKKEL_IN_PDX = mikkel_in_pdx ? "true" : "false";
   if (msg) replyWithStatus(msg);
 }
 
