@@ -133,7 +133,18 @@ function replyToChannel(msg) {
 
   // if our bot is mentioned
   if (msg.mentions.has(client.user.id)) {
-    replyWithStatus(msg);
+    // and it's from Mikkel
+    if (msg.author.id == MIKKEL_USER_ID) {
+      if (content.includes("leaving PDX")) {
+        setMikkelStatus(false, msg);
+      } else if (content.includes("in PDX")) {
+        setMikkelStatus(true, msg);
+      } else {
+        replyWithStatus(msg);
+      }
+    } else {
+      replyWithStatus(msg);
+    }
   }
   // mikkel is the author
   else if (msg.author.id == MIKKEL_USER_ID) {
