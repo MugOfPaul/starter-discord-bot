@@ -4,15 +4,14 @@ const { Client, GatewayIntentBits, Partials, ActivityType, REST, Routes, userMen
 require('dotenv').config()
 
 const express = require('express');
-const port = process.env.PORT || 8999;
 
+const PORT = process.env.PORT || 8999;
 const APPLICATION_ID = process.env.APPLICATION_ID 
 const TOKEN = process.env.TOKEN 
 const PUBLIC_KEY = process.env.PUBLIC_KEY || 'not set'
 const GUILD_ID = process.env.GUILD_ID 
 
 const app = express();
-
 const rest = new REST().setToken(TOKEN);
 
 const client = new Client({
@@ -27,7 +26,6 @@ const client = new Client({
     Partials.Message
   ]
 });
-
 
 var dm_datastore_channel = 0;
 var mikkel_in_pdx = process.env.MIKKEL_IN_PDX === 'true';
@@ -77,7 +75,7 @@ const sad_content = [
   "Mikkel isn't in Portland today. But maybe he's got a Hinge date for tomorrow?",
   "Mr. Green does not appear to be in Portland, Oregon today.",
   "The bad news: " + userMention(MIKKEL_USER_ID) + " is not in Portland today.\nThe good news: He probably forgot something and will be back for it.",
-  "I don't know where he is. But it's not Portland!"
+  "I don't know where he is. But I know it's not Portland!"
 ];
 
 
@@ -104,35 +102,61 @@ async function setMikkelStatus(status, msg) {
 
 function replyWithStatus(msg) {
   if (mikkel_in_pdx) {
+
     var random =  Math.floor((Math.random() * happy_content.length));
     var randomContent = happy_content[random];
 
-    if (msg.react)
-      msg.react(HAPPY_REACT);
+    if (msg.react) msg.react(HAPPY_REACT);
     msg.reply(randomContent + " " + HAPPY_REACT);
 
   } else {
+
     var random =  Math.floor((Math.random() * sad_content.length));
     var randomContent = sad_content[random];
 
-    if (msg.react)
-      msg.react(SAD_REACT);
+    if (msg.react) msg.react(SAD_REACT);
+    msg.reply(randomContent + " " + SAD_REACT);
 
-      msg.reply(randomContent + " " + SAD_REACT);
   }
 }
 
 function replyToMikkel(msg) {
   var content = msg.content.toLowerCase();
 
-  if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === POOP_CHANNEL_ID) {
+  // Mikkel is mentioning Ricardo...
+  if (msg.mentions.has(client.user.id)) {
+    if (content.includes("leaving PDX")) {
+        setMikkelStatus(false, msg);
+    } else if (content.includes("in PDX")) {
+        setMikkelStatus(true, msg);
+    }
+    return; 
+  }
+
+  // forgetful Mikkel
+  if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
+
+    if (Math.random() >= 0.5)
+      msg.reply("Oh... did you forget something... again? 🙄");
+    else
+      msg.reply("Typical " + userMention(MIKKEL_USER_ID) + " 🙄");
+
+    if (msg.react) msg.react("🙄");
+
+  // late Mikkel
+  } else if (['be late', 'running behind', 'there later'].some(s => content.includes(s))) {
+    if (Math.random() >= 0.5)
+      msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
+    else
+      msg.reply("You didn't think  " + userMention(MIKKEL_USER_ID) + " would be on time, did you? 🙄");
+
+    if (msg.react) msg.react("🙄");
+  
+  // poop Mikkel
+  } else if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === POOP_CHANNEL_ID) {
     if (msg.react) msg.react("💩");
-  } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
-    msg.reply("Oh... did you forget something... again? 🙄");
-    if (msg.react) msg.react("🙄");
-  }  else if (['be late', 'running behind', 'going to be late'].some(s => content.includes(s))) {
-    msg.reply("Nobody _really_ expected you to be on time, anyway. 🙄");
-    if (msg.react) msg.react("🙄");
+  
+    // generic Mikkel
   } else {
     if (msg.react && Math.random() >= 0.6) msg.react("🕵🏾‍♂️");
   }
@@ -144,43 +168,16 @@ function replyToChannel(msg) {
 
   var content = msg.content.toLowerCase();
 
-  // if our bot is mentioned
-  if (msg.mentions.has(client.user.id)) {
-    // and it's from Mikkel
-    if (msg.author.id == MIKKEL_USER_ID) {
-      if (content.includes("leaving PDX")) {
-        setMikkelStatus(false, msg);
-      } else if (content.includes("in PDX")) {
-        setMikkelStatus(true, msg);
-      } else {
-        replyWithStatus(msg);
-      }
-    } else {
-      replyWithStatus(msg);
-    }
-  }
   // mikkel is the author
-  else if (msg.author.id == MIKKEL_USER_ID) {
+  if (msg.author.id == MIKKEL_USER_ID) {
     replyToMikkel(msg);
   }
    // mikkel mentioned or tagged
-  else if (msg.author.id == MIKKEL_USER_ID || mikkels.some((m) => content.includes(m))) {
+  else if (mikkels.some((m) => content.includes(m))) {
     
     // status in PDX keywords
     if ( status_terms.some((t) => content.includes(t))) {
       replyWithStatus(msg);
-
-    // forget keywords
-    } else if (['forgot', 'forget', 'forgotten'].some(s => content.includes(s))) {
-      msg.reply("Typical " + userMention(MIKKEL_USER_ID) + " 🙄");
-      if (msg.react) msg.react("🙄");
-
-    // late keywords
-    } else if (['late'].some(s => content.includes(s))) {
-      //console.log('sending late quip...');
-      msg.reply("You didn't think  " + userMention(MIKKEL_USER_ID) + " would be on time, did you? 🙄");
-      if (msg.react) msg.react("🙄");
-
     // no special keywords
     } else {
       //console.log('No interesting keywords... ' + content);
@@ -249,8 +246,8 @@ async function setUpCommands() {
 
 client.on("messageCreate", (msg) => {
    
-  // DMs
-  if (msg.author.id != client.user.id && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
+  // Special Owner DMs
+  if (msg.author.id === OWNER_USER_ID && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
     var content = msg.content.toLowerCase();
 
     if (content.startsWith('status:')) {
@@ -260,7 +257,7 @@ client.on("messageCreate", (msg) => {
     } 
   }
 
-  // Channel messages
+  // any other general messages
   replyToChannel(msg);
 
 });
@@ -323,7 +320,7 @@ app.get('/custom', (req, res) => {
   res.send('Done.');
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   client.login(TOKEN);
 })
 
