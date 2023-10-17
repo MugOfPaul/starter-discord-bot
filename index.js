@@ -198,7 +198,7 @@ async function setUpDMDataStore() {
     console.log("Got DM Datastore channel. Reading data...");
 
     var savedStatus = false;
-    var statusData = nil;
+    var statusData = null;
 
     const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
 
