@@ -198,19 +198,21 @@ async function setUpDMDataStore() {
     console.log("Got DM Datastore channel. Reading data...");
 
     var savedStatus = false;
-    
+    var statusData = nil;
+
     const fetched = await dm_datastore_channel.messages.fetch({limit: 99}); 
+
     fetched.forEach(msg => {
       var statusSet = false;
       // only care about bot sent messages in the DM channel
-      if (!statusSet && msg.author.id === client.user.id && msg.content.includes("status:")) {
+      if (!statusData && msg.author.id === client.user.id && msg.content.includes("status:")) {
         console.log(msg.id + ":" + msg.content);
-        savedStatus = ['in', 'true'].some(s => msg.content.toLowerCase().includes(s));
-        statusSet = true;
+        statusData = msg.content.toLowerCase();
       }
     });
 
-    console.log("Saving Mikkel status...");
+    savedStatus = ['in', 'true'].some(s => statusData.includes(s));
+    console.log("Saving Mikkel status... " + savedStatus);
     setMikkelStatus(savedStatus);
     
   } else {
