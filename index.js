@@ -153,12 +153,21 @@ function replyToMikkel(msg) {
     if (msg.react) msg.react("🙄");
   
   // poop Mikkel
-  } else if (['poop', '💩', 'gut'].some(s => content.includes(s)) || msg.channel.id === POOP_CHANNEL_ID) {
-    if (msg.react) msg.react("💩");
-  
+  } else if (['poop', '💩', 'gut', 'biome'].some(s => content.includes(s)) || msg.channel.id === POOP_CHANNEL_ID) {
+    if (msg.react) {
+      if (msg.channel.id === POOP_CHANNEL_ID) {
+        if (Math.random() > 0.6)  msg.react("💩");
+      } else {
+        msg.react("🚽");
+      }
+    } 
     // generic Mikkel
   } else {
-    if (msg.react && Math.random() >= 0.6) msg.react("🕵🏾‍♂️");
+    if (msg.react && Math.random() > 0.6) {
+      var emoji = ['🕵🏾‍♂️', '🧐', '👀', '📝', '🤨']
+      var random =  Math.floor((Math.random() * emoji.length));
+      msg.react(emoji[random]);
+    }
   }
 }
 
