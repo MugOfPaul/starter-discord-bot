@@ -231,7 +231,7 @@ async function setUpDMDataStore() {
 
 function setUpPresence() {
   try {
-    client.user.setPresence({ activities: [{ name: 'the game of \"Where is Mikkel Green\"' }], status: 'online' });
+    client.user.setPresence({ activities: [{ name: 'playing /mikkel' }], status: 'online' });
   } catch(error) {
     console.error('Error setting presence');
   }
