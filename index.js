@@ -44,13 +44,13 @@ const mikkels = [
 ];
 
 const status_terms = [
-  "where",
+  "where are you",
   "whereabouts",
-  "when",
+  "when are you",
   "pdx",
-  "portland",
+  "in portland",
   "rose city",
-  "travel",
+  "flying",
   "traveling",
   "flight",
   "visiting",
