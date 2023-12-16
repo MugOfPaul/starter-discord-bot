@@ -129,9 +129,9 @@ function replyToMikkel(msg) {
 
   // Mikkel is mentioning Ricardo...
   if (msg.mentions.has(client.user.id)) {
-    if (content.includes("status: out") || content.includes("leaving PDX")) {
+    if (content.includes("status: out") || content.includes("status:out") || content.includes("leaving PDX")) {
         setMikkelStatus(false, msg);
-    } else if (content.includes("status: in") || content.includes("in PDX")) {
+    } else if (content.includes("status: in") || content.includes("status:in")  || content.includes("in PDX")) {
         setMikkelStatus(true, msg);
     } else {
       msg.reply("You can update your status by telling me \"status: in\", \"status: out\", \"leaving PDX\", \"in PDX\"");
