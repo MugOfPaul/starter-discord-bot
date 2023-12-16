@@ -260,7 +260,8 @@ async function setUpCommands() {
 }
 
 client.on("messageCreate", (msg) => {
-   
+  console.log("messageCreate: " + interaction);
+
   // Special Owner DMs
   if (msg.author.id === OWNER_USER_ID && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
     var content = msg.content.toLowerCase();
@@ -279,6 +280,7 @@ client.on("messageCreate", (msg) => {
 
 client.on('interactionCreate', async (interaction) => {
   
+  console.log("interactionCreate: " + interaction);
   if (!interaction.isCommand()) return; // Ignore interactions that are not commands
 
   const { commandName } = interaction;
