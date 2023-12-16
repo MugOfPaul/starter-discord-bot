@@ -260,7 +260,7 @@ async function setUpCommands() {
 }
 
 client.on("messageCreate", (msg) => {
-  console.log("messageCreate: " + interaction);
+  console.log("messageCreate: " + msg);
 
   // Special Owner DMs
   if (msg.author.id === OWNER_USER_ID && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
