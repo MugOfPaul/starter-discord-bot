@@ -280,7 +280,7 @@ client.on("messageCreate", (msg) => {
 
 client.on('interactionCreate', async (interaction) => {
   
-  console.log("interactionCreate: " + interaction);
+  console.log("interactionCreate ");
   if (!interaction.isCommand()) return; // Ignore interactions that are not commands
 
   const { commandName } = interaction;
