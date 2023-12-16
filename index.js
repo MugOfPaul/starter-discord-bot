@@ -38,6 +38,9 @@ const POOP_CHANNEL_ID = "863464428522438686";
 
 const mikkels = [
   MIKKEL_USER_ID,
+  "mr green",
+  "mr. green",
+  "mister green",
   "mikkel",
   "mikkel.green",
   "mikkel green"
