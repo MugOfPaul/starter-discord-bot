@@ -183,16 +183,18 @@ function replyToChannel(msg) {
   // mikkel is the author
   if (msg.author.id == MIKKEL_USER_ID) {
     replyToMikkel(msg);
+    return;
   }
-   // mikkel mentioned or tagged
-  else if (mikkels.some((m) => content.includes(m))) {
+
+  // mikkel mentioned or tagged
+  if (mikkels.some(m => content.includes(m))) {
     
     // status in PDX keywords
-    if ( status_terms.some((t) => content.includes(t))) {
+    if ( status_terms.some(t => content.includes(t))) {
       replyWithStatus(msg);
     // no special keywords
     } else {
-      //console.log('No interesting keywords... ' + content);
+      console.log('No interesting keywords... ' + content);
       if (msg.react && Math.random() >= 0.5) msg.react("💚");
     }
   }
