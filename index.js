@@ -195,7 +195,13 @@ function replyToChannel(msg) {
     // no special keywords
     } else {
       console.log('No interesting keywords... ' + content);
-      if (msg.react && (Math.random() >= 0.5 || msg.mentions.has(client.user.id))) msg.react("💚");
+      if (msg.react && (Math.random() >= 0.5)) msg.react("💚");
+    }
+  } else if (msg.mentions.has(client.user.id)) {
+    if (msg.react) {
+      var emoji = ['🕵🏾‍♂️', '💚', '🟢', '🟩', '🦠']
+      var random =  Math.floor((Math.random() * emoji.length));
+      msg.react(emoji[random]);
     }
   }
 }
