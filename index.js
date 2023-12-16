@@ -44,6 +44,7 @@ const mikkels = [
 ];
 
 const status_terms = [
+  "where is",
   "where are you",
   "whereabouts",
   "when are you",
@@ -188,14 +189,13 @@ function replyToChannel(msg) {
 
   // mikkel mentioned or tagged
   if (mikkels.some(m => content.includes(m))) {
-    
     // status in PDX keywords (or if somebody tags Ricardo too)
-    if ( status_terms.some(t => content.includes(t)) || msg.mentions.has(client.user.id)) {
+    if ( status_terms.some(t => content.includes(t)) ) {
       replyWithStatus(msg);
     // no special keywords
     } else {
       console.log('No interesting keywords... ' + content);
-      if (msg.react && (Math.random() >= 0.5)) msg.react("💚");
+      if (msg.react && (Math.random() >= 0.5 || msg.mentions.has(client.user.id))) msg.react("💚");
     }
   }
 }
@@ -261,8 +261,9 @@ async function setUpCommands() {
   }
 }
 
+// primary message processing here
 client.on("messageCreate", (msg) => {
-  console.log("messageCreate: " + msg);
+  //console.log("messageCreate: " + msg);
 
   // Special Owner DMs
   if (msg.author.id === OWNER_USER_ID && (msg.channel.type == ChannelType.DM || msg.channel.type == ChannelType.GroupDM)) {
@@ -280,9 +281,10 @@ client.on("messageCreate", (msg) => {
 
 });
 
+// this is pretty much just for slash commands
 client.on('interactionCreate', async (interaction) => {
   
-  console.log("interactionCreate ");
+  //console.log("interactionCreate ");
   if (!interaction.isCommand()) return; // Ignore interactions that are not commands
 
   const { commandName } = interaction;
