@@ -189,13 +189,13 @@ function replyToChannel(msg) {
   // mikkel mentioned or tagged
   if (mikkels.some(m => content.includes(m))) {
     
-    // status in PDX keywords
-    if ( status_terms.some(t => content.includes(t))) {
+    // status in PDX keywords (or if somebody tags Ricardo too)
+    if ( status_terms.some(t => content.includes(t)) || msg.mentions.has(client.user.id)) {
       replyWithStatus(msg);
     // no special keywords
     } else {
       console.log('No interesting keywords... ' + content);
-      if (msg.react && Math.random() >= 0.5) msg.react("💚");
+      if (msg.react && (Math.random() >= 0.5)) msg.react("💚");
     }
   }
 }
